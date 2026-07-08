@@ -64,17 +64,20 @@ const schema = JSON.stringify({
           siteName: "Spotifust"
         },
         image: {
-          alt: "Spotifust: A lightweight Spotify client in Rust"
+          alt: "Spotifust: A lightweight Spotify client in Rust",
+          type: "image/png",
+          width: 1200,
+          height: 630
         }
       }}
       twitter={{
         card: "summary_large_image",
-        site: "@GenaDeev",
+        site: "@Spotifust",
         creator: "@GenaDeev",
         title: title,
         description: description,
         image: imageUrl,
-        imageAlt: "Spotifust OpenGraph Image"
+        imageAlt: "Spotifust: lightweight Spotify client built entirely in Rust"
       }}
     />
     <script type="application/ld+json" set:html={schema} />
