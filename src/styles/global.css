@@ -51,6 +51,24 @@ body {
   position: relative;
 }
 
+/* Custom Text Selection */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.hero h1::selection,
+.hero h1 *::selection,
+.button.outline::selection,
+.button.outline *::selection,
+.stat-box .number::selection,
+.stat-box .number *::selection,
+.author-link::selection,
+.author-link *::selection {
+  background-color: var(--color-text);
+  color: var(--color-accent);
+}
+
 .grid-background {
   position: fixed;
   top: 0;
