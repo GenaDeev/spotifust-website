@@ -1,0 +1,255 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getRepoStats, getRoadmap } from '../utils/github';
+
+const stats = await getRepoStats();
+const roadmap = await getRoadmap();
+---
+
+<Layout title="Spotifust | A lightweight Spotify client in Rust" description="Spotifust is a multi-platform, ultra-lightweight Spotify client built from scratch in Rust by GenaDeev.">
+  <nav class="top-nav">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light mode">
+      <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <span>Toggle Theme</span>
+    </button>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="container">
+        <img src="/spotifust.png" alt="Spotifust Logo" class="logo" />
+        <h1 class="glow-text">Spotifust</h1>
+        <p class="subtitle">A multi-platform, ultra-lightweight Spotify client built entirely from scratch in Rust. Ditching the heavy browser engines for pure native playback.</p>
+        
+        <div class="actions">
+          <a href="https://github.com/GenaDeev/spotifust" target="_blank" rel="noopener noreferrer" class="button primary">View on GitHub</a>
+          <a href="#story" class="button secondary">Discover the Story</a>
+        </div>
+      </div>
+    </header>
+
+    <section id="story" class="section reveal">
+      <div class="container">
+        <h2 class="glow-text">The Story Behind Spotifust</h2>
+        <div class="story-content">
+          <p>Spotifust started from a simple but stubborn idea: <strong>why does a music player need to load an entire web browser inside it?</strong></p>
+          <p>Modern desktop apps often rely on heavy web engines like Electron or Chromium, which eat up RAM and battery. Our purpose is to build an application that does one thing perfectly—playing music—while maintaining a baseline memory footprint of <strong>less than 25 MB</strong>.</p>
+          <p>No Node.js running behind the scenes, no full Chromium instance rendering four buttons. Just one binary, one process, and your GPU doing what it does best. That's the core philosophy.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="tech-stack" class="section reveal">
+      <div class="container">
+        <h2 class="glow-text">Powered by Rust</h2>
+        <p class="section-desc">Spotifust relies on the Rust ecosystem's best crates to deliver a smooth and safe native experience.</p>
+        
+        <div class="grid tech-grid">
+          <div class="card">
+            <h3>🎨 iced & tiny-skia</h3>
+            <p>For a GPU-accelerated GUI based on the Elm Architecture (MVU). Clean state management without mutability nightmares.</p>
+          </div>
+          <div class="card">
+            <h3>🎵 librespot</h3>
+            <p>An embedded engine for session management, DRM decryption, and chunk fetching straight from Spotify's servers.</p>
+          </div>
+          <div class="card">
+            <h3>🔊 rodio</h3>
+            <p>Handles cross-platform audio output to feed decoded PCM arrays directly to the system sound drivers.</p>
+          </div>
+          <div class="card">
+            <h3>🌐 rspotify & tokio</h3>
+            <p>Asynchronous multi-threading for the Spotify Web API and network requests, avoiding UI thread blocking.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap" class="section reveal">
+      <div class="container">
+        <h2 class="glow-text">Architecture & Roadmap</h2>
+        <p class="section-desc">We follow a strict zero-crashing policy and an Elm-like pure Model-View-Update flow. Here is where the project is heading.</p>
+        
+        <div class="roadmap-list">
+          {roadmap.map((phase, index) => (
+            <details class="roadmap-dropdown" open={phase.status === 'wip' || index === 0}>
+              <summary class={phase.status}>
+                <span class="status-icon">
+                  {phase.status === 'done' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  )}
+                  {phase.status === 'wip' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  )}
+                  {phase.status === 'todo' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                  )}
+                </span>
+                <span class="phase-title">
+                  {phase.title.includes(':') ? 
+                    <Fragment><strong>{phase.title.split(':')[0]}:</strong> {phase.title.split(':').slice(1).join(':').trim()}</Fragment> 
+                    : 
+                    <strong>{phase.title}</strong>
+                  }
+                </span>
+                <span class="chevron">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </span>
+              </summary>
+              <div class="dropdown-content">
+                <ul>
+                  {phase.tasks.map(task => (
+                    <li class={task.isDone ? 'done-task' : 'todo-task'}>
+                      <span class="task-icon">
+                        {task.isDone ? 
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                          : 
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-border)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle></svg>
+                        }
+                      </span>
+                      <span class="task-text" set:html={task.content}></span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <section id="stats" class="section reveal">
+      <div class="container">
+        <h2 class="glow-text">Project Metrics</h2>
+        <div class="stats-grid">
+           <div class="stat-box">
+             <span class="number">{stats.commits}</span>
+             <span class="label">Commits</span>
+           </div>
+           <div class="stat-box">
+             <span class="number">{stats.loc}</span>
+             <span class="label">Lines of Code</span>
+           </div>
+           <div class="stat-box">
+             <span class="number">{stats.prs}</span>
+             <span class="label">Pull Requests</span>
+           </div>
+           <div class="stat-box">
+             <span class="number">{stats.issues}</span>
+             <span class="label">Open Issues</span>
+           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contribute" class="section reveal">
+      <div class="container">
+        <h2 class="glow-text">Get Involved</h2>
+        <div class="story-content">
+          <p>If you love systems programming in Rust, software architecture, or simply enjoy crafting highly performant tools, the door is open for your contributions.</p>
+          
+          <div class="contributors">
+            <h3>Current Contributors ({stats.contributors.length})</h3>
+            <div class="avatars">
+              {stats.contributors.map((c) => (
+                <a href={c.url} target="_blank" rel="noopener noreferrer" title={c.login}>
+                  <img src={c.avatar_url} alt={c.login} class="avatar" loading="lazy" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <p>Built with passion and code by <a href="https://github.com/GenaDeev" target="_blank" rel="noopener noreferrer" class="author-link">GenaDeev</a>. Any PR that respects our philosophy is more than welcome.</p>
+          <br>
+          <a href="https://github.com/GenaDeev/spotifust/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="button outline">Read Contributing Guide</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p>&copy; {new Date().getFullYear()} Spotifust. Designed & Built by <strong>GenaDeev</strong>.</p>
+        <p class="license">Licensed under the <a href="https://github.com/GenaDeev/spotifust/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">GPLv3 License</a>.</p>
+      </div>
+    </footer>
+  </main>
+</Layout>
+
+<script is:inline>
+  const toggleBtn = document.getElementById('theme-toggle');
+  const sunIcon = document.querySelector('.sun-icon');
+  const moonIcon = document.querySelector('.moon-icon');
+
+  function updateIcons(theme) {
+    if (theme === 'light') {
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+    } else {
+      sunIcon.style.display = 'block';
+      moonIcon.style.display = 'none';
+    }
+  }
+
+  // Init
+  const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateIcons(currentTheme);
+
+  toggleBtn.addEventListener('click', () => {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    const newTheme = isLight ? 'dark' : 'light';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateIcons(newTheme);
+  });
+
+  // Accordion Animation Logic
+  document.querySelectorAll('details.roadmap-dropdown').forEach(details => {
+    const summary = details.querySelector('summary');
+    const content = details.querySelector('.dropdown-content');
+
+    summary.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      if (details.hasAttribute('data-animating')) return;
+      details.setAttribute('data-animating', 'true');
+
+      if (details.open) {
+        content.style.height = `${content.offsetHeight}px`;
+        content.style.transition = 'height 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.35s ease';
+        content.offsetHeight; // reflow
+        
+        content.style.height = '0px';
+        content.style.opacity = '0';
+        
+        setTimeout(() => {
+          details.open = false;
+          content.style.height = '';
+          content.style.opacity = '';
+          content.style.transition = '';
+          details.removeAttribute('data-animating');
+        }, 350);
+      } else {
+        details.open = true;
+        content.style.height = '0px';
+        content.style.opacity = '0';
+        content.style.overflow = 'hidden';
+        content.style.transition = 'height 0.35s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.35s ease';
+        
+        const targetHeight = content.scrollHeight;
+        content.offsetHeight; // reflow
+        
+        content.style.height = `${targetHeight}px`;
+        content.style.opacity = '1';
+        
+        setTimeout(() => {
+          content.style.height = '';
+          content.style.overflow = '';
+          content.style.transition = '';
+          details.removeAttribute('data-animating');
+        }, 350);
+      }
+    });
+  });
+</script>

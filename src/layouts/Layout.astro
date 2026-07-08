@@ -1,0 +1,113 @@
+---
+import { SEO } from "astro-seo";
+import '@fontsource/geist-sans';
+import '@fontsource/instrument-serif';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const siteUrl = 'https://spotifust.comidolar.com.ar';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const imageUrl = new URL('/spotifust-og.png', siteUrl).toString();
+
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Spotifust",
+  "operatingSystem": "Windows, macOS, Linux",
+  "applicationCategory": "MultimediaApplication",
+  "description": description,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "GenaDeev",
+    "url": "https://github.com/GenaDeev"
+  }
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="theme-color" content="#121212" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonicalURL} />
+    
+    <SEO
+      title={title}
+      description={description}
+      canonical={canonicalURL.toString()}
+      openGraph={{
+        basic: {
+          title: title,
+          type: "website",
+          image: imageUrl,
+          url: canonicalURL.toString(),
+        },
+        optional: {
+          description: description,
+          locale: "en_US",
+          siteName: "Spotifust"
+        },
+        image: {
+          alt: "Spotifust: A lightweight Spotify client in Rust"
+        }
+      }}
+      twitter={{
+        card: "summary_large_image",
+        site: "@GenaDeev",
+        creator: "@GenaDeev",
+        title: title,
+        description: description,
+        image: imageUrl,
+        imageAlt: "Spotifust OpenGraph Image"
+      }}
+    />
+    <script type="application/ld+json" set:html={schema} />
+    
+    <!-- Theme Script to prevent FOUC -->
+    <script is:inline>
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    </script>
+  </head>
+  <body>
+    <div class="grid-background"></div>
+    <div class="page-content">
+      <slot />
+    </div>
+    
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('active');
+            } else {
+              entry.target.classList.remove('active'); // Two-way scroll animation
+            }
+          });
+        }, { threshold: 0.1 });
+        
+        const hiddenElements = document.querySelectorAll('.reveal');
+        hiddenElements.forEach((el) => observer.observe(el));
+      });
+    </script>
+  </body>
+</html>
