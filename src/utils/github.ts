@@ -12,7 +12,10 @@ export async function getRepoStats() {
     prs: 0,
     issues: 0,
     loc: 0,
-    contributors: [] as { login: string, avatar_url: string, url: string }[]
+    contributors: [] as { login: string, avatar_url: string, url: string }[],
+    lastCommit: { timestamp: new Date().toISOString(), author: "GenaDeev" },
+    languageDistribution: [] as { name: string, percentage: number, color: string }[],
+    commitActivity: [] as number[]
   };
 
   try {
@@ -29,17 +32,26 @@ export async function getRepoStats() {
         }));
     }
 
-    // 2. Commits (extract from Link header)
+    // 2. Commits & Latest Commit
     const resCommits = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=1`, { headers });
     if (resCommits.ok) {
+      const data = await resCommits.json();
+      if (data && data.length > 0) {
+        const latest = data[0];
+        const date = latest.commit?.author?.date;
+        const author = latest.author?.login || latest.commit?.author?.name || 'Unknown';
+        if (date) {
+          stats.lastCommit = { timestamp: date, author };
+        }
+      }
+
       const linkHeader = resCommits.headers.get('link');
       if (linkHeader) {
         const match = linkHeader.match(/page=(\d+)>; rel="last"/);
         if (match) {
           stats.commits = parseInt(match[1], 10);
         }
-      } else {
-        const data = await resCommits.json();
+      } else if (data && data.length) {
         stats.commits = data.length;
       }
     }
@@ -59,18 +71,75 @@ export async function getRepoStats() {
       stats.prs = data.total_count || 0;
     }
 
-    // 4. Lines of code (excluding md, json, toml, lock, svg, etc) via Tokei API
+    // 4. Lines of code & Language Distribution
     const resLoc = await fetch(`https://tokei.kojix2.net/api/github/${repo}`);
     if (resLoc.ok) {
       const locData = await resLoc.json();
       if (locData?.data?.languages) {
         let codeLines = 0;
+        let rawLangs: {name: string, code: number}[] = [];
+        
         for (const [lang, langStats] of Object.entries(locData.data.languages)) {
-          if (!['Markdown', 'JSON', 'TOML', 'SVG', 'YAML'].includes(lang)) {
-            codeLines += (langStats as any).code || 0;
+          if (!['Markdown', 'JSON', 'TOML', 'SVG', 'YAML', 'Plain Text', 'INI', 'BASH', 'Dockerfile', 'Makefile'].includes(lang)) {
+            const code = (langStats as any).code || 0;
+            codeLines += code;
+            rawLangs.push({ name: lang, code });
           }
         }
         stats.loc = codeLines;
+        
+        stats.languageDistribution = rawLangs.map(l => {
+          let color = '#ccc';
+          if (l.name === 'Rust') color = '#dea584';
+          else if (l.name === 'TypeScript' || l.name === 'TSX') color = '#3178c6';
+          else if (l.name === 'JavaScript' || l.name === 'JSX') color = '#f1e05a';
+          else if (l.name === 'CSS' || l.name === 'Sass') color = '#563d7c';
+          else if (l.name === 'HTML') color = '#e34c26';
+          else if (l.name === 'Astro') color = '#ff5a03';
+          
+          return {
+            name: l.name,
+            percentage: (l.code / codeLines) * 100,
+            color
+          };
+        }).sort((a,b) => b.percentage - a.percentage);
+      }
+    }
+
+    // 5. Commit Activity (Last 28 days exactly ending today in UTC)
+    const last28Days = Array.from({ length: 28 }, (_, i) => {
+        const d = new Date();
+        d.setUTCDate(d.getUTCDate() - (27 - i));
+        
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        
+        return {
+            dateStr: d.toISOString().split('T')[0],
+            count: 0,
+            dayOfMonth: d.getUTCDate(),
+            dateString: `${monthNames[d.getUTCMonth()]} ${d.getUTCDate()}`
+        };
+    });
+
+    const resActivity = await fetch(`https://api.github.com/repos/${repo}/commits?per_page=100`, { headers });
+    if (resActivity.ok) {
+      const commitsData = await resActivity.json();
+      if (Array.isArray(commitsData) && commitsData.length > 0) {
+        let hasCommits = false;
+        for (const item of commitsData) {
+          if (item.commit?.author?.date) {
+             const commitDateStr = new Date(item.commit.author.date).toISOString().split('T')[0];
+             
+             const targetDay = last28Days.find(d => d.dateStr === commitDateStr);
+             if (targetDay) {
+                 targetDay.count++;
+                 hasCommits = true;
+             }
+          }
+        }
+        if (hasCommits) {
+            stats.commitActivity = last28Days;
+        }
       }
     }
   } catch (e) {
@@ -83,7 +152,18 @@ export async function getRepoStats() {
     prs: stats.prs || 1,
     issues: stats.issues || 0,
     loc: stats.loc || 2097,
-    contributors: stats.contributors.length ? stats.contributors : [{ login: 'GenaDeev', avatar_url: 'https://avatars.githubusercontent.com/u/0?v=4', url: 'https://github.com/GenaDeev' }]
+    contributors: stats.contributors.length ? stats.contributors : [{ login: 'GenaDeev', avatar_url: 'https://avatars.githubusercontent.com/u/0?v=4', url: 'https://github.com/GenaDeev' }],
+    lastCommit: stats.lastCommit,
+    languageDistribution: stats.languageDistribution.length ? stats.languageDistribution : [{ name: 'Rust', percentage: 100, color: '#dea584' }],
+    commitActivity: stats.commitActivity.length === 28 ? stats.commitActivity : Array.from({ length: 28 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - (27 - i));
+        return { 
+            count: 0, 
+            dayOfMonth: d.getDate(),
+            dateString: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        };
+    })
   };
 }
 

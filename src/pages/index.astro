@@ -1,5 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import spotifustLogo from '../assets/spotifust.png';
+import appleMusicLogo from '../assets/apple-music.svg';
+import tidalLogo from '../assets/tidal.svg';
+import spotifyLogo from '../assets/spotify.svg';
 import { getRepoStats, getRoadmap } from '../utils/github';
 
 const stats = await getRepoStats();
@@ -19,6 +24,10 @@ const roadmap = await getRoadmap();
     <header class="hero">
       <div class="container">
         <img src="/spotifust.png" alt="Spotifust Logo" class="logo" />
+        <div class="live-badge">
+          <span class="breathing-dot"></span>
+          Last commit: <span id="commit-time" data-timestamp={stats.lastCommit.timestamp}>recently</span> by {stats.lastCommit.author}
+        </div>
         <h1 class="glow-text"><span translate="no">Spotifust</span></h1>
         <p class="subtitle">A multi-platform, ultra-lightweight <span translate="no">Spotify</span> client built entirely from scratch in <span translate="no">Rust</span>. Ditching the heavy browser engines for pure native playback.</p>
         
@@ -36,6 +45,76 @@ const roadmap = await getRoadmap();
           <p><span translate="no">Spotifust</span> started from a simple but stubborn idea: <strong>why does a music player need to load an entire web browser inside it?</strong></p>
           <p>Modern desktop apps often rely on heavy web engines like <span translate="no">Electron</span> or <span translate="no">Chromium</span>, which eat up RAM and battery. Our purpose is to build an application that does one thing perfectly—playing music—while maintaining a baseline memory footprint of <strong>less than 25 MB</strong>.</p>
           <p>No <span translate="no">Node.js</span> running behind the scenes, no full <span translate="no">Chromium</span> instance rendering four buttons. Just one binary, one process, and your <span translate="no">GPU</span> doing what it does best. That's the core philosophy.</p>
+
+          <div class="ram-comparison-card card">
+            <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+              RAM Footprint Comparison
+            </h3>
+            
+            <div class="ram-bars">
+              <!-- Spotifust -->
+              <div class="ram-item spotifust-ram">
+                <div class="ram-info">
+                  <span class="app-name">
+                      <Image alt="Spotifust Logo" src={spotifustLogo} width="16" height="16" />
+                      Spotifust <span class="app-tech">(Rust)</span>
+                  </span>
+                  <span class="ram-value">25 - 75 MB*</span>
+                </div>
+                <div class="ram-track">
+                  <div class="ram-fill" style="width: 9%;"></div>
+                </div>
+              </div>
+              
+              <!-- Apple Music -->
+              <div class="ram-item">
+                <div class="ram-info">
+                  <span class="app-name">
+                      <Image alt="Apple Music Logo" src={appleMusicLogo} width="16" height="16" />
+                      Apple Music <span class="app-tech">(WinUI3)</span>**
+                  </span>
+                  <span class="ram-value">180 - 350 MB</span>
+                </div>
+                <div class="ram-track">
+                  <div class="ram-fill" style="width: 40%;"></div>
+                </div>
+              </div>
+
+              <!-- Tidal -->
+              <div class="ram-item">
+                <div class="ram-info">
+                  <span class="app-name">
+                      <Image class="tidal-logo" alt="Tidal Logo" src={tidalLogo} width="16" height="16" />
+                      Tidal <span class="app-tech">(Electron)</span>
+                  </span>
+                  <span class="ram-value">300 - 700 MB</span>
+                </div>
+                <div class="ram-track">
+                  <div class="ram-fill" style="width: 75%;"></div>
+                </div>
+              </div>
+              
+              <!-- Spotify -->
+              <div class="ram-item spotify-ram">
+                <div class="ram-info">
+                  <span class="app-name">
+                      <Image alt="Spotify Logo" src={spotifyLogo} width="16" height="16" />
+                      Spotify Desktop <span class="app-tech">(Electron)</span>
+                  </span>
+                  <span class="ram-value">400 - 800 MB</span>
+                </div>
+                <div class="ram-track">
+                  <div class="ram-fill" style="width: 100%;"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="ram-notes">
+              <p>* The final optimization goal is to maintain a baseline footprint of ≤ 25 MB.</p>
+              <p>** Measurements based on the native Windows application.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -61,6 +140,24 @@ const roadmap = await getRoadmap();
           <div class="card">
             <h3>🌐 <span translate="no">rspotify</span> & <span translate="no">tokio</span></h3>
             <p>Asynchronous multi-threading for the <span translate="no">Spotify Web API</span> and network requests, avoiding <span translate="no">UI</span> thread blocking.</p>
+          </div>
+          
+          <div class="card span-2 lang-card">
+            <h3>📊 Language Distribution</h3>
+            <div class="lang-bar">
+              {stats.languageDistribution.map((lang) => (
+                <div class="lang-segment" style={`width: ${lang.percentage}%; background-color: ${lang.color};`} title={`${lang.name} ${lang.percentage.toFixed(1)}%`}></div>
+              ))}
+            </div>
+            <div class="lang-legend">
+              {stats.languageDistribution.map((lang) => (
+                <div class="legend-item">
+                  <span class="dot" style={`background-color: ${lang.color};`}></span>
+                  <span class="lang-name">{lang.name}</span>
+                  <span class="lang-pct">{lang.percentage.toFixed(1)}%</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -139,6 +236,118 @@ const roadmap = await getRoadmap();
              <span class="number">{stats.issues}</span>
              <span class="label">Open <span translate="no">Issues</span></span>
            </div>
+        </div>
+        
+        <div class="card chart-container-card" style="margin-top: 2.5rem; padding: 2.5rem;">
+          <h3 style="font-family: var(--font-serif); font-size: 1.9rem; margin-bottom: 0.5rem;">
+            Daily Commits 
+            <span class="desktop-only" style="color: var(--color-text-muted); font-family: var(--font-sans); font-size: 1rem; font-weight: normal;"> (Last 28 days)</span>
+            <span class="mobile-only" style="color: var(--color-text-muted); font-family: var(--font-sans); font-size: 1rem; font-weight: normal;"> (Last 7 days)</span>
+          </h3>
+          <div class="chart-container">
+            <!-- Desktop SVG (28 Days) -->
+            <svg width="100%" height="160" class="activity-svg desktop-only" style="overflow: visible;">
+              <!-- Background -->
+              <rect x="0" y="0" width="100%" height="160" rx="12" fill="var(--color-surface-hover)" opacity="0.3" />
+              
+              <!-- Horizontal Grid Lines -->
+              <line x1="5%" y1="30" x2="98%" y2="30" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4" />
+              <line x1="5%" y1="70" x2="98%" y2="70" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4" />
+              <line x1="5%" y1="110" x2="98%" y2="110" stroke="var(--color-border)" stroke-width="1" />
+              
+              <!-- Y Axis Labels -->
+              {(() => {
+                 const counts = stats.commitActivity.map((d: any) => typeof d === 'number' ? d : d.count);
+                 const max = Math.max(...counts, 5);
+                 return (
+                   <g fill="var(--color-text-muted)" font-size="11" font-family="var(--font-sans)" text-anchor="end">
+                     <text x="4%" y="34">{max}</text>
+                     <text x="4%" y="74">{Math.floor(max/2)}</text>
+                     <text x="4%" y="114">0</text>
+                   </g>
+                 )
+              })()}
+
+              <!-- Bars & Tooltips -->
+              {stats.commitActivity.map((dayData: any, i: number) => {
+                 const count = typeof dayData === 'number' ? dayData : dayData.count;
+                 const dayOfMonth = typeof dayData === 'number' ? i+1 : dayData.dayOfMonth;
+                 const counts = stats.commitActivity.map((d: any) => typeof d === 'number' ? d : d.count);
+                 const max = Math.max(...counts, 5);
+                 const height = (count / max) * 80;
+                 const xPercent = 6 + (i * (91 / 27)); // from 6% to 97%
+                 const y = 110 - height;
+                 return (
+                   <g class="bar-group">
+                     <rect x={`${xPercent}%`} y="20" width="3%" height="100" fill="transparent" class="hover-area" style="transform: translateX(-1.5%);" />
+                     <rect x={`${xPercent}%`} y={y} width="8" height={Math.max(height, 2)} rx="4" fill="var(--color-accent)" class="chart-bar" style="transform: translateX(-4px);" />
+                     <text x={`${xPercent}%`} y={y - 8} class="bar-tooltip" text-anchor="middle">{count}</text>
+                     <text x={`${xPercent}%`} y="130" fill="var(--color-text-muted)" font-size="10" font-family="var(--font-sans)" text-anchor="middle">{dayOfMonth}</text>
+                   </g>
+                 )
+              })}
+              
+              <!-- X Axis Labels -->
+              <g fill="var(--color-text-muted)" font-size="11" font-family="var(--font-sans)">
+                <text x="6%" y="150" text-anchor="middle">{stats.commitActivity[0]?.dateString}</text>
+                <text x="97%" y="150" text-anchor="middle">Today</text>
+              </g>
+            </svg>
+
+            <!-- Mobile SVG (7 Days) -->
+            <svg width="100%" height="160" class="activity-svg mobile-only" style="overflow: visible;">
+              <!-- Background -->
+              <rect x="0" y="0" width="100%" height="160" rx="12" fill="var(--color-surface-hover)" opacity="0.3" />
+              
+              <!-- Horizontal Grid Lines -->
+              <line x1="8%" y1="30" x2="95%" y2="30" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4" />
+              <line x1="8%" y1="70" x2="95%" y2="70" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="4" />
+              <line x1="8%" y1="110" x2="95%" y2="110" stroke="var(--color-border)" stroke-width="1" />
+              
+              <!-- Y Axis Labels -->
+              {(() => {
+                 const mobileActivity = stats.commitActivity.slice(-7);
+                 const counts = mobileActivity.map((d: any) => typeof d === 'number' ? d : d.count);
+                 const max = Math.max(...counts, 5);
+                 return (
+                   <g fill="var(--color-text-muted)" font-size="11" font-family="var(--font-sans)" text-anchor="end">
+                     <text x="6%" y="34">{max}</text>
+                     <text x="6%" y="74">{Math.floor(max/2)}</text>
+                     <text x="6%" y="114">0</text>
+                   </g>
+                 )
+              })()}
+
+              <!-- Bars & Tooltips -->
+              {stats.commitActivity.slice(-7).map((dayData: any, i: number) => {
+                 const mobileActivity = stats.commitActivity.slice(-7);
+                 const count = typeof dayData === 'number' ? dayData : dayData.count;
+                 const dayOfMonth = typeof dayData === 'number' ? i+1 : dayData.dayOfMonth;
+                 const counts = mobileActivity.map((d: any) => typeof d === 'number' ? d : d.count);
+                 const max = Math.max(...counts, 5);
+                 const height = (count / max) * 80;
+                 const xPercent = 10 + (i * (82 / 6)); // 6 intervals between 7 items, spanning from 10% to 92%
+                 const y = 110 - height;
+                 return (
+                   <g class="bar-group">
+                     <rect x={`${xPercent}%`} y="20" width="10%" height="100" fill="transparent" class="hover-area" style="transform: translateX(-5%);" />
+                     <rect x={`${xPercent}%`} y={y} width="16" height={Math.max(height, 2)} rx="6" fill="var(--color-accent)" class="chart-bar" style="transform: translateX(-8px);" />
+                     <text x={`${xPercent}%`} y={y - 8} class="bar-tooltip" text-anchor="middle" font-size="13">{count}</text>
+                     <text x={`${xPercent}%`} y="130" fill="var(--color-text-muted)" font-size="12" font-family="var(--font-sans)" text-anchor="middle">{dayOfMonth}</text>
+                   </g>
+                 )
+              })}
+              
+              <!-- X Axis Labels -->
+              <g fill="var(--color-text-muted)" font-size="11" font-family="var(--font-sans)">
+                <text x="10%" y="150" text-anchor="middle">{stats.commitActivity.slice(-7)[0]?.dateString}</text>
+                <text x="92%" y="150" text-anchor="middle">Today</text>
+              </g>
+            </svg>
+            <div style="width: 100%; text-align: right; margin-top: 0.5rem;">
+              <span style="font-size: 0.75rem; color: var(--color-text-muted); font-family: var(--font-sans);">*Dates and commit activity are grouped by UTC timezone</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -252,4 +461,23 @@ const roadmap = await getRoadmap();
       }
     });
   });
+
+  // Live Commit Time
+  const commitTimeEl = document.getElementById('commit-time');
+  if (commitTimeEl) {
+    const timestamp = commitTimeEl.getAttribute('data-timestamp');
+    if (timestamp) {
+      const updateHours = () => {
+        const diffMs = new Date().getTime() - new Date(timestamp).getTime();
+        const minsAgo = Math.floor(diffMs / (1000 * 60));
+        if (minsAgo < 60) {
+          commitTimeEl.textContent = `${Math.max(minsAgo, 1)}m ago`;
+        } else {
+          const hoursAgo = Math.floor(minsAgo / 60);
+          commitTimeEl.textContent = `${hoursAgo}hr ago`;
+        }
+      };
+      updateHours();
+    }
+  }
 </script>
