@@ -216,10 +216,12 @@ p {
 .logo {
   width: 120px;
   height: 120px;
+  padding: 6px;
   margin-bottom: 3rem;
   border-radius: 28px;
-  box-shadow: 0 0 45px var(--color-accent-glow);
+  box-shadow: 0 0 45px var(--color-accent-glow), 2px 2px 15px var(--color-text-muted) inset;
   transition: transform 0.3s ease;
+  background-color: var(--color-surface);
 }
 
 .logo:hover {
