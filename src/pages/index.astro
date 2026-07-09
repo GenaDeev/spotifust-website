@@ -23,7 +23,7 @@ const roadmap = await getRoadmap();
   <main>
     <header class="hero">
       <div class="container">
-        <img src="/spotifust.png" alt="Spotifust Logo" class="logo" />
+          <Image loading="eager" fetchpriority="high" width="120px" height="120px" src={spotifustLogo} alt="Spotifust Logo" class="logo" />
         <div class="live-badge">
           <span class="breathing-dot"></span>
           Last commit: <span id="commit-time" data-timestamp={stats.lastCommit.timestamp}>recently</span> by {stats.lastCommit.author}
@@ -363,7 +363,7 @@ const roadmap = await getRoadmap();
             <div class="avatars">
               {stats.contributors.map((c) => (
                 <a href={c.url} target="_blank" rel="noopener noreferrer" title={c.login}>
-                  <img src={c.avatar_url} alt={c.login} class="avatar" loading="lazy" />
+                    <Image width="60px" height="60px" src={c.avatar_url} alt={c.login} class="avatar" loading="lazy" />
                 </a>
               ))}
             </div>
