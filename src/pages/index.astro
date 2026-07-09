@@ -26,13 +26,13 @@ const roadmap = await getRoadmap();
           <Image loading="eager" fetchpriority="high" width="120px" height="120px" src={spotifustLogo} alt="Spotifust Logo" class="logo" />
         <div class="live-badge">
           <span class="breathing-dot"></span>
-          Last commit: <span id="commit-time" data-timestamp={stats.lastCommit.timestamp}>recently</span> by {stats.lastCommit.author}
+          Last commit: <span id="commit-time" data-timestamp={stats.lastCommit.timestamp}>recently </span>by {stats.lastCommit.author}
         </div>
         <h1 class="glow-text"><span translate="no">Spotifust</span></h1>
-        <p class="subtitle">A multi-platform, ultra-lightweight <span translate="no">Spotify</span> client built entirely from scratch in <span translate="no">Rust</span>. Ditching the heavy browser engines for pure native playback.</p>
+        <p class="subtitle">A multi-platform, ultra-lightweight<span translate="no"> Spotify </span>client built entirely from scratch in<span translate="no"> Rust</span>. Ditching the heavy browser engines for pure native playback.</p>
         
         <div class="actions">
-          <a href="https://github.com/GenaDeev/spotifust" target="_blank" rel="noopener noreferrer" class="button primary">View on <span translate="no">GitHub</span></a>
+          <a href="https://github.com/GenaDeev/spotifust" target="_blank" rel="noopener noreferrer" class="button primary">View on<span translate="no">&nbspGitHub</span></a>
           <a href="#story" class="button secondary">Discover the Story</a>
         </div>
       </div>
@@ -40,11 +40,11 @@ const roadmap = await getRoadmap();
 
     <section id="story" class="section reveal">
       <div class="container">
-        <h2 class="glow-text">The Story Behind <span translate="no">Spotifust</span></h2>
+        <h2 class="glow-text">The Story Behind<span translate="no"> Spotifust</span></h2>
         <div class="story-content">
-          <p><span translate="no">Spotifust</span> started from a simple but stubborn idea: <strong>why does a music player need to load an entire web browser inside it?</strong></p>
-          <p>Modern desktop apps often rely on heavy web engines like <span translate="no">Electron</span> or <span translate="no">Chromium</span>, which eat up RAM and battery. Our purpose is to build an application that does one thing perfectly—playing music—while maintaining a baseline memory footprint of <strong>less than 25 MB</strong>.</p>
-          <p>No <span translate="no">Node.js</span> running behind the scenes, no full <span translate="no">Chromium</span> instance rendering four buttons. Just one binary, one process, and your <span translate="no">GPU</span> doing what it does best. That's the core philosophy.</p>
+          <p><span translate="no">Spotifust </span>started from a simple but stubborn idea: <strong>why does a music player need to load an entire web browser inside it?</strong></p>
+          <p>Modern desktop apps often rely on heavy web engines like<span translate="no"> Electron </span>or<span translate="no"> Chromium</span>, which eat up RAM and battery. Our purpose is to build an application that does one thing perfectly—playing music—while maintaining a baseline memory footprint of <strong>less than 25 MB</strong>.</p>
+          <p>No<span translate="no"> Node.js </span>running behind the scenes, no full<span translate="no"> Chromium </span>instance rendering four buttons. Just one binary, one process, and your<span translate="no"> GPU </span>doing what it does best. That's the core philosophy.</p>
 
           <div class="ram-comparison-card card">
             <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.75rem;">
@@ -52,7 +52,7 @@ const roadmap = await getRoadmap();
               RAM Footprint Comparison
             </h3>
             
-            <div class="ram-bars">
+            <div translate="no" class="ram-bars">
               <!-- Spotifust -->
               <div class="ram-item spotifust-ram">
                 <div class="ram-info">
@@ -121,25 +121,25 @@ const roadmap = await getRoadmap();
 
     <section id="tech-stack" class="section reveal">
       <div class="container">
-        <h2 class="glow-text">Powered by <span translate="no">Rust</span></h2>
-        <p class="section-desc"><span translate="no">Spotifust</span> relies on the <span translate="no">Rust</span> ecosystem's best crates to deliver a smooth and safe native experience.</p>
+        <h2 class="glow-text">Powered by<span translate="no"> Rust</span></h2>
+        <p class="section-desc"><span translate="no">Spotifust </span>relies on the<span translate="no"> Rust </span>ecosystem's best crates to deliver a smooth and safe native experience.</p>
         
         <div class="grid tech-grid">
           <div class="card">
-            <h3>🎨 <span translate="no">iced</span> & <span translate="no">tiny-skia</span></h3>
-            <p>For a <span translate="no">GPU</span>-accelerated <span translate="no">GUI</span> based on the <span translate="no">Elm Architecture</span> (<span translate="no">MVU</span>). Clean state management without mutability nightmares.</p>
+            <h3>🎨<span translate="no"> iced </span>&<span translate="no"> tiny-skia</span></h3>
+            <p>For a<span translate="no"> GPU</span>-accelerated<span translate="no"> GUI </span>based on the<span translate="no"> Elm Architecture </span>(<span translate="no">MVU</span>). Clean state management without mutability nightmares.</p>
           </div>
           <div class="card">
-            <h3>🎵 <span translate="no">librespot</span></h3>
-            <p>An embedded engine for session management, <span translate="no">DRM</span> decryption, and chunk fetching straight from <span translate="no">Spotify</span>'s servers.</p>
+            <h3>🎵<span translate="no"> librespot</span></h3>
+            <p>An embedded engine for session management,<span translate="no"> DRM </span>decryption, and chunk fetching straight from<span translate="no"> Spotify</span>'s servers.</p>
           </div>
           <div class="card">
-            <h3>🔊 <span translate="no">rodio</span></h3>
-            <p>Handles cross-platform audio output to feed decoded <span translate="no">PCM</span> arrays directly to the system sound drivers.</p>
+            <h3>🔊<span translate="no"> rodio</span></h3>
+            <p>Handles cross-platform audio output to feed decoded<span translate="no"> PCM </span>arrays directly to the system sound drivers.</p>
           </div>
           <div class="card">
-            <h3>🌐 <span translate="no">rspotify</span> & <span translate="no">tokio</span></h3>
-            <p>Asynchronous multi-threading for the <span translate="no">Spotify Web API</span> and network requests, avoiding <span translate="no">UI</span> thread blocking.</p>
+            <h3>🌐<span translate="no"> rspotify </span>&<span translate="no"> tokio</span></h3>
+            <p>Asynchronous multi-threading for the<span translate="no"> Spotify Web API </span>and network requests, avoiding<span translate="no"> UI </span>thread blocking.</p>
           </div>
           
           <div class="card span-2 lang-card">
@@ -166,7 +166,7 @@ const roadmap = await getRoadmap();
     <section id="roadmap" class="section reveal">
       <div class="container">
         <h2 class="glow-text">Architecture & Roadmap</h2>
-        <p class="section-desc">We follow a strict zero-crashing policy and an <span translate="no">Elm</span>-like pure <span translate="no">Model-View-Update</span> flow. Here is where the project is heading.</p>
+        <p class="section-desc">We follow a strict zero-crashing policy and an<span translate="no"> Elm</span>-like pure<span translate="no"> Model-View-Update </span>flow. Here is where the project is heading.</p>
         
         <div class="roadmap-list">
           {roadmap.map((phase, index) => (
@@ -234,7 +234,7 @@ const roadmap = await getRoadmap();
            </div>
            <div class="stat-box">
              <span class="number">{stats.issues}</span>
-             <span class="label">Open <span translate="no">Issues</span></span>
+             <span class="label">Open<span translate="no"> Issues</span></span>
            </div>
         </div>
         
@@ -356,7 +356,7 @@ const roadmap = await getRoadmap();
       <div class="container">
         <h2 class="glow-text">Get Involved</h2>
         <div class="story-content">
-          <p>If you love systems programming in <span translate="no">Rust</span>, software architecture, or simply enjoy crafting highly performant tools, the door is open for your contributions.</p>
+          <p>If you love systems programming in<span translate="no"> Rust</span>, software architecture, or simply enjoy crafting highly performant tools, the door is open for your contributions.</p>
           
           <div class="contributors">
             <h3>Current Contributors ({stats.contributors.length})</h3>
@@ -369,7 +369,7 @@ const roadmap = await getRoadmap();
             </div>
           </div>
 
-          <p>Built with passion and code by <a href="https://github.com/GenaDeev" target="_blank" rel="noopener noreferrer" class="author-link"><span translate="no">GenaDeev</span></a>. Any <span translate="no">PR</span> that respects our philosophy is more than welcome.</p>
+          <p>Built with passion and code by <a href="https://github.com/GenaDeev" target="_blank" rel="noopener noreferrer" class="author-link"><span translate="no">GenaDeev</span></a>. Any<span translate="no"> PR </span>that respects our philosophy is more than welcome.</p>
           <br>
           <a href="https://github.com/GenaDeev/spotifust/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer" class="button outline">Read Contributing Guide</a>
         </div>
@@ -378,7 +378,7 @@ const roadmap = await getRoadmap();
 
     <footer>
       <div class="container">
-        <p>&copy; {new Date().getFullYear()} <span translate="no">Spotifust</span>. Designed & Built by <strong><span translate="no">GenaDeev</span></strong>.</p>
+        <p>&copy; {new Date().getFullYear()}<span translate="no"> Spotifust</span>. Designed & Built by <strong><span translate="no">GenaDeev</span></strong>.</p>
         <p class="license">Licensed under the <a href="https://github.com/GenaDeev/spotifust/blob/main/LICENSE" target="_blank" rel="noopener noreferrer"><span translate="no">GPLv3 License</span></a>.</p>
       </div>
     </footer>
