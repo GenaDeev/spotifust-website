@@ -106,7 +106,7 @@ const schema = JSON.stringify({
               entry.target.classList.remove('active'); // Two-way scroll animation
             }
           });
-        }, { threshold: 0.1 });
+        }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
         
         const hiddenElements = document.querySelectorAll('.reveal');
         hiddenElements.forEach((el) => observer.observe(el));
