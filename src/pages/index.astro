@@ -24,9 +24,15 @@ const roadmap = await getRoadmap();
     <header class="hero">
       <div class="container">
           <Image loading="eager" fetchpriority="high" width="120px" height="120px" src={spotifustLogo} alt="Spotifust Logo" class="logo" />
-        <div class="live-badge">
-          <span class="breathing-dot"></span>
-          Last commit: <span id="commit-time" data-timestamp={stats.lastCommit.timestamp}>recently </span>by {stats.lastCommit.author}
+        <div class="hero-badges">
+          <div class="live-badge">
+            <span class="breathing-dot"></span>
+            Last commit: <span id="commit-time" data-timestamp={stats.lastCommit.timestamp}>recently </span>by {stats.lastCommit.author}
+          </div>
+          <div class="warn-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            No releases yet — active development
+          </div>
         </div>
         <h1 class="glow-text"><span translate="no">Spotifust</span></h1>
         <p class="subtitle">A multi-platform, ultra-lightweight<span translate="no"> Spotify </span>client built entirely from scratch in<span translate="no"> Rust</span>. Ditching the heavy browser engines for pure native playback.</p>
