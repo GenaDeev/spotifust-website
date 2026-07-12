@@ -7,15 +7,6 @@
   src: url('/fonts/instrument-serif-latin-400-normal.woff2') format('woff2');
 }
 
-@font-face {
-  font-family: 'Instrument Serif';
-  font-style: italic;
-  font-weight: 400;
-  font-display: block;
-  src: url('/fonts/instrument-serif-latin-400-italic.woff2') format('woff2');
-}
-
-
 :root {
   /* Brand Accent: Spotifust Rust Orange */
   --color-accent: #DEA584; 
@@ -250,7 +241,6 @@ p {
   font-weight: 700;
   letter-spacing: -0.01em;
   margin-bottom: 1.2rem;
-  font-style: italic;
   color: var(--color-accent);
   line-height: 1;
 }
